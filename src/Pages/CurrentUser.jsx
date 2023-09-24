@@ -12,7 +12,7 @@ const UserProfile = () => {
     const fetchPosts = async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5000/api/tweets/current",
+          "https://tweet-spot.onrender.com/api/tweets/current",
           {
             headers: {
               "Content-Type": "application/json",

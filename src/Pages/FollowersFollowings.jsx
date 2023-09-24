@@ -12,7 +12,7 @@ const FollowersFollowings = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get(`http://localhost:5000/api/users/${id}/${location}`);
+        const { data } = await axios.get(`https://tweet-spot.onrender.com/api/users/${id}/${location}`);
         if (!data.success) {
           throw new Error('Something went wrong. Followers or Followings!')
         } else {

@@ -8,7 +8,7 @@ export const AuthContextProvider = ({ children }) => {
 
   const auth = async (type, formData) => {
     const { data } = await axios.post(
-      `http://localhost:5000/api/${type}`,
+      `https://tweet-spot.onrender.com/api/${type}`,
       formData,
       {
         headers: { "Content-Type": "application/json" },

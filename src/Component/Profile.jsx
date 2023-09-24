@@ -18,7 +18,7 @@ const Profile = ({ currentUser, type, posts, token }) => {
   const followUnfollowHandler = async () => {
     try {
       const { data } = await axios.put(
-        `http://localhost:5000/api/users/${currentUser._id}`,
+        `https://tweet-spot.onrender.com/api/users/${currentUser._id}`,
         {},
         {
           headers: {

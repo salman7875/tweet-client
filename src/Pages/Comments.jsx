@@ -16,7 +16,7 @@ const Comments = () => {
     const fetchComments = async (id) => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/tweets/comments/${id}`
+          `https://tweet-spot.onrender.com/api/tweets/comments/${id}`
         );
         if (!data.success) {
           throw new Error("Something went wrong. Comments!");
@@ -35,7 +35,7 @@ const Comments = () => {
     try {
       console.log(comment);
       const { data } = await axios.post(
-        `http://localhost:5000/api/tweets/${id}`,
+        `https://tweet-spot.onrender.com/api/tweets/${id}`,
         { comment },
         {
           headers: {

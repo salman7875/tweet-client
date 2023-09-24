@@ -10,7 +10,7 @@ const Feed = () => {
   useEffect(() => {
     const fetchFeedOfFollowings = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/feed", {
+        const { data } = await axios.get("https://tweet-spot.onrender.com/api/feed", {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,

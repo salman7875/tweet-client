@@ -13,7 +13,7 @@ const UserProfile = () => {
     const fetchSingleUser = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/users/${id}`,
+          `https://tweet-spot.onrender.com/api/users/${id}`,
           {
             headers: { Authorization: "Bearer " + token },
           }
@@ -34,7 +34,7 @@ const UserProfile = () => {
     const fetchSingleUserPost = async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5000/api/tweets/${id}`,
+          `https://tweet-spot.onrender.com/api/tweets/${id}`,
           {
             headers: { Authorization: "Bearer " + token },
           }

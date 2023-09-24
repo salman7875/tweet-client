@@ -25,7 +25,7 @@ const CreatePost = () => {
     try {
       const formData = { content, caption };
       const { data } = await axios.post(
-        "http://localhost:5000/api/tweets/create",
+        "https://tweet-spot.onrender.com/api/tweets/create",
         formData,
         {
           headers: {

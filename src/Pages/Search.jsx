@@ -12,7 +12,7 @@ const Search = () => {
   useEffect(() => {
     const fetchAllTweets = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/tweets/");
+        const { data } = await axios.get("https://tweet-spot.onrender.com/api/tweets/");
         setExploreData(data.tweets);
       } catch (err) {
         console.log(err);
@@ -25,7 +25,7 @@ const Search = () => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.post(
-          "http://localhost:5000/api/find",
+          "https://tweet-spot.onrender.com/api/find",
           { username: user },
           {
             headers: { "Content-Type": "application/json" },

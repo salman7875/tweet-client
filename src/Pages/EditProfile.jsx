@@ -17,7 +17,7 @@ const EditProfile = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/current", {
+        const { data } = await axios.get("https://tweet-spot.onrender.com/api/current", {
           headers: { Authorization: "Bearer " + token },
         });
         setUser(data.user);

@@ -10,7 +10,7 @@ const useCurrentUser = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("http://localhost:5000/api/current", {
+        const { data } = await axios.get("https://tweet-spot.onrender.com/api/current", {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,
