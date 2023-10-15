@@ -1,28 +1,28 @@
 import Header from "../Component/Header";
 import Comment from "../Component/Comment";
 import { Link, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import useCurrentUser from "../Hooks/useCurrentUser";
+import { AuthContext } from "../Context/auth";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const Comments = () => {
   const token = localStorage.getItem("token");
   const { id } = useParams();
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  const { data: user, error } = useCurrentUser();
+  const { currentUser, loading, error } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchComments = async (id) => {
       try {
         const { data } = await axios.get(
-          `https://tweet-spot.onrender.com/api/tweets/comments/${id}`
+          `${localEndPoint}/tweets/comments/${id}`
         );
         if (!data.success) {
           throw new Error("Something went wrong. Comments!");
         } else {
           setComments(data.userComment.comments);
-          console.log(data.userComment.comments);
         }
       } catch (err) {
         console.log(err);
@@ -33,9 +33,8 @@ const Comments = () => {
 
   const createComment = async () => {
     try {
-      console.log(comment);
       const { data } = await axios.post(
-        `https://tweet-spot.onrender.com/api/tweets/${id}`,
+        `${localEndPoint}/tweets/${id}`,
         { comment },
         {
           headers: {
@@ -45,7 +44,6 @@ const Comments = () => {
         }
       );
       setComment("");
-      console.log(data);
     } catch (err) {
       console.log(err);
     }
@@ -74,7 +72,7 @@ const Comments = () => {
       </Header>
       <div className="flex items-center justify-around gap-2 py-1 shadow-md">
         <img
-          src={`data:image/jpeg;base64${user?.avatar}`}
+          src={`data:image/jpeg;base64${currentUser?.avatar}`}
           alt=""
           className="w-12 h-12 rounded-full object-cover"
         />

@@ -2,15 +2,19 @@ import { useEffect, useState } from "react";
 import Header from "../Component/Header";
 import Post from "../Component/Post";
 import axios from "axios";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const Feed = () => {
   const token = localStorage.getItem("token");
   const [feeds, setFeeds] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchFeedOfFollowings = async () => {
       try {
-        const { data } = await axios.get("https://tweet-spot.onrender.com/api/feed", {
+        setLoading(true);
+        const { data } = await axios.get(`${localEndPoint}/feed`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,
@@ -21,8 +25,10 @@ const Feed = () => {
         } else {
           setFeeds(data.tweets);
         }
+        setLoading(false);
       } catch (err) {
-        console.log(err);
+        setLoading(false);
+        setError(err);
       }
     };
     fetchFeedOfFollowings();
@@ -49,11 +55,16 @@ const Feed = () => {
           </svg>
         </a>
       </Header>
-      <div>
-        {feeds.map((feed) => (
-          <Post key={feed._id} feed={feed} token={token} />
-        ))}
-      </div>
+      {loading && <h1>Loading...</h1>}
+      {feeds.length > 0 ? (
+        <div>
+          {feeds.map((feed) => (
+            <Post key={feed._id} feed={feed} token={token} />
+          ))}
+        </div>
+      ) : (
+        <h1 className="text-center text-4xl font-bold mt-72">No Posts</h1>
+      )}
     </>
   );
 };

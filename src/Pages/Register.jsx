@@ -29,7 +29,9 @@ const Register = () => {
     try {
       const formData = {  avatar, ...data }
       await auth('register', formData)
-      navigate('/')
+      setTimeout(() => {
+        navigate('/')
+      }, 500)
     } catch (err) {
       console.log(err.message);
     }

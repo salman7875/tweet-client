@@ -1,14 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../Component/Header";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
+import { AuthContext } from "../Context/auth";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const CreatePost = () => {
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [caption, setCaption] = useState("");
-
-  const token = localStorage.getItem("token");
+  const { token } = useContext(AuthContext)
 
   const convertBase64 = (e) => {
     let reader = new FileReader();
@@ -24,8 +25,7 @@ const CreatePost = () => {
   const uploadPostHandler = async () => {
     try {
       const formData = { content, caption };
-      const { data } = await axios.post(
-        "https://tweet-spot.onrender.com/api/tweets/create",
+      const { data } = await axios.post(`${localEndPoint}/tweets/create`,
         formData,
         {
           headers: {

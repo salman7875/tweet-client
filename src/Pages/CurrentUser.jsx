@@ -1,25 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Profile from "../Component/Profile";
 import axios from "axios";
-import useCurrentUser from "../Hooks/useCurrentUser";
+import { AuthContext } from "../Context/auth";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const UserProfile = () => {
-  const token = localStorage.getItem("token");
-  const { loading, data, error } = useCurrentUser();
+  const { token, loading, error, currentUser } = useContext(AuthContext);
   const [posts, setPosts] = useState(null);
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await axios.get(
-          "https://tweet-spot.onrender.com/api/tweets/current",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
+        const { data } = await axios.get(`${localEndPoint}/tweets/current`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+        });
         setPosts(data.tweets);
       } catch (err) {
         console.log(err);
@@ -29,7 +26,12 @@ const UserProfile = () => {
   }, []);
 
   return (
-    <Profile currentUser={data} type={"current"} posts={posts} token={token} />
+    <Profile
+      currentUser={currentUser}
+      type={"current"}
+      posts={posts}
+      token={token}
+    />
   );
 };
 

@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Header from "../Component/Header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../Context/auth";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const EditProfile = () => {
-  const token = localStorage.getItem("token");
+  const { token, currentUser: user, loading, error } = useContext(AuthContext);
   const [avatar, setAvatar] = useState("");
-  const [user, setUser] = useState(null);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -15,23 +16,12 @@ const EditProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.get("https://tweet-spot.onrender.com/api/current", {
-          headers: { Authorization: "Bearer " + token },
-        });
-        setUser(data.user);
-        setFormData({
-          username: data.user.username,
-          name: data.user.name,
-          bio: data.user.bio,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUser();
-  }, []);
+    setFormData({
+      username: user.username,
+      name: user.name,
+      bio: user.bio,
+    });
+  }, [user]);
 
   const formChangeHandler = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -59,9 +49,8 @@ const EditProfile = () => {
 
   const editProfileHandler = async () => {
     try {
-      console.log({ ...formData, avatar });
       const { data } = await axios.put(
-        "http://localhost:5000/api/edit",
+        `${localEndPoint}/edit`,
         { ...formData, avatar },
         {
           headers: {
@@ -73,7 +62,6 @@ const EditProfile = () => {
       if (!data.success) {
         throw new Error("Something went wrong. Edit-Profile!");
       } else {
-        console.log(data);
         navigate("/profile");
       }
     } catch (err) {

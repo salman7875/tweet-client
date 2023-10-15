@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import Header from "./Header";
-import useCurrentUser from "../Hooks/useCurrentUser";
+import { useContext, useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import LogoutOption from "../Layout/LogoutOption";
+import { AuthContext } from "../Context/auth";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const Profile = ({ currentUser, type, posts, token }) => {
-  const { data: user } = useCurrentUser();
+  const { currentUser: user, loading, error, logout } = useContext(AuthContext);
   const [showOption, setShowOption] = useState(false);
   const [clicked, setClicked] = useState(null);
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const Profile = ({ currentUser, type, posts, token }) => {
   const followUnfollowHandler = async () => {
     try {
       const { data } = await axios.put(
-        `https://tweet-spot.onrender.com/api/users/${currentUser._id}`,
+        `${localEndPoint}/users/${currentUser._id}`,
         {},
         {
           headers: {
@@ -37,10 +38,8 @@ const Profile = ({ currentUser, type, posts, token }) => {
   };
 
   const logoutHandler = () => {
-    localStorage.removeItem("token");
-    setTimeout(() => {
-      navigate("/login");
-    }, 200);
+    logout();
+    navigate("/login");
   };
 
   return (

@@ -1,21 +1,12 @@
-import { useContext, useLayoutEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Context/auth";
 
 const Login = () => {
-  const { auth } = useContext(AuthContext);
-  const token = localStorage.getItem('token')
+  const { auth, token } = useContext(AuthContext);
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState(null)
-  const navigate = useNavigate()
-
-  useLayoutEffect(() => {
-    if (!token) {
-      navigate('/login')
-    } else {
-      navigate('/')
-    }
-  }, [token])
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   const changeInputHandler = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,9 +16,11 @@ const Login = () => {
     e.preventDefault();
     try {
       await auth("login", formData);
-      navigate('/')
+      setTimeout(() => {
+        navigate("/");
+      }, 500);
     } catch (err) {
-      setError(err.response.data.message)
+      setError(err.response.data.message);
       console.log(err.response.data.message);
     }
   };

@@ -1,44 +1,28 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import PostOption from "../Layout/PostOption";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { AuthContext } from "../Context/auth";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const Post = ({ feed, token }) => {
   const [showOption, setShowOption] = useState(false);
   const [liked, setLiked] = useState(null);
   const [likes, setLikes] = useState(null);
-  const [user, setUser] = useState(null);
+  const { currentUser, loading, error } = useContext(AuthContext);
 
   useEffect(() => {
     setLikes(feed.likes.length);
   }, []);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.get("https://tweet-spot.onrender.com/api/current", {
-          headers: { Authorization: "Bearer " + token },
-        });
-        if (!data.success) {
-          throw new Error("Something went wrong. Fetching!");
-        } else {
-          setUser(data.user);
-        }
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    setLiked(feed.likes.includes(user?._id) | false);
-  }, [feed, user]);
+    setLiked(feed.likes.includes(currentUser?._id) | false);
+  }, [feed, currentUser]);
 
   const likeUnlikeHandler = async () => {
     try {
       const { data } = await axios.put(
-        `https://tweet-spot.onrender.com/api/tweets/action/${feed._id}`,
+        `${localEndPoint}/tweets/action/${feed._id}`,
         {},
         {
           headers: {

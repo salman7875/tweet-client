@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const useCurrentUser = () => {
   const token = localStorage.getItem("token");
@@ -10,7 +11,7 @@ const useCurrentUser = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get("https://tweet-spot.onrender.com/api/current", {
+        const { data } = await axios.get(`${localEndPoint}/current`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token,

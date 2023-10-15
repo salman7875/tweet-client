@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Overlay from "../Layout/Overlay";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { hostEndPoint, localEndPoint } from "../Utils/request";
 
 const Search = () => {
   const [show, setShow] = useState(false);
@@ -9,15 +10,16 @@ const Search = () => {
   const [searchedUser, setSearchedUser] = useState([]);
   const [exploreData, setExploreData] = useState([]);
 
+  const fetchAllTweets = useCallback(async () => {
+    try {
+      const { data } = await axios.get(`${localEndPoint}/tweets/`);
+      setExploreData(data.tweets);
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
+
   useEffect(() => {
-    const fetchAllTweets = async () => {
-      try {
-        const { data } = await axios.get("https://tweet-spot.onrender.com/api/tweets/");
-        setExploreData(data.tweets);
-      } catch (err) {
-        console.log(err);
-      }
-    };
     fetchAllTweets();
   }, []);
 
@@ -25,16 +27,16 @@ const Search = () => {
     const fetchUser = async () => {
       try {
         const { data } = await axios.post(
-          "https://tweet-spot.onrender.com/api/find",
+          `${localEndPoint}/find`,
           { username: user },
           {
             headers: { "Content-Type": "application/json" },
           }
         );
         if (!data.success) {
-          throw new Error('Something went wrong. Searching!')
+          throw new Error("Something went wrong. Searching!");
         }
-        setSearchedUser(data.user)
+        setSearchedUser(data.user);
       } catch (err) {
         console.log(err);
       }
@@ -90,7 +92,7 @@ const Search = () => {
       ) : (
         <div className="grid grid-cols-3 gap-1">
           {exploreData.map((data) => (
-            <Link to='/' key={data._id}>
+            <Link to="/" key={data._id}>
               <img
                 src={`data:image/jpeg;base64${data.content}`}
                 key={data._id}
