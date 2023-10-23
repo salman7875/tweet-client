@@ -24,26 +24,30 @@ const Search = () => {
   }, []);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const { data } = await axios.post(
-          `${localEndPoint}/find`,
-          { username: user },
-          {
-            headers: { "Content-Type": "application/json" },
+    const time = setTimeout(() => {
+      const fetchUser = async () => {
+        try {
+          const { data } = await axios.post(
+            `${localEndPoint}/find`,
+            { username: user },
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          if (!data.success) {
+            throw new Error("Something went wrong. Searching!");
           }
-        );
-        if (!data.success) {
-          throw new Error("Something went wrong. Searching!");
+          setSearchedUser(data.user);
+        } catch (err) {
+          console.log(err);
         }
-        setSearchedUser(data.user);
-      } catch (err) {
-        console.log(err);
-      }
+      };
+      fetchUser();
+    }, 1000);
+
+    return () => {
+      clearTimeout(time);
     };
-    setTimeout(() => {
-      user && fetchUser();
-    }, 400);
   }, [user]);
 
   return (

@@ -1,22 +1,23 @@
-import Comments from "./Pages/Comments";
-import CreatePost from "./Pages/CreatePost";
-import EditProfile from "./Pages/EditProfile";
-import Feed from "./Pages/Feed";
-import FollowersFollowings from "./Pages/FollowersFollowings";
-import Login from "./Pages/Login";
-import NotFound from "./Pages/NotFound";
-import Register from "./Pages/Register";
-import Root from "./Pages/Root";
-import Search from "./Pages/Search";
+import { Suspense, lazy, useEffect, useState } from "react";
 import {
   Routes,
   Route,
   BrowserRouter as Router,
   Navigate,
 } from "react-router-dom";
-import CurrentUser from "./Pages/CurrentUser";
-import UserProfile from "./Pages/UserProfile";
-import { useEffect, useState } from "react";
+
+const Comments = lazy(() => import("./Pages/Comments"));
+const CreatePost = lazy(() => import("./Pages/CreatePost"));
+const EditProfile = lazy(() => import("./Pages/EditProfile"));
+const Feed = lazy(() => import("./Pages/Feed"));
+const FollowersFollowings = lazy(() => import("./Pages/FollowersFollowings"));
+const Login = lazy(() => import("./Pages/Login"));
+const NotFound = lazy(() => import("./Pages/NotFound"));
+const Register = lazy(() => import("./Pages/Register"));
+const Root = lazy(() => import("./Pages/Root"));
+const Search = lazy(() => import("./Pages/Search"));
+const CurrentUser = lazy(() => import("./Pages/CurrentUser"));
+const UserProfile = lazy(() => import("./Pages/UserProfile"));
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem("token") | null);
@@ -40,17 +41,87 @@ const App = () => {
           path="/"
           element={<ProtectedRoute path="/login" element={<Root />} />}
         >
-          <Route index element={<Feed />} />
-          <Route path="explore" element={<Search />} />
-          <Route path="comments/:id" element={<Comments />} />
-          <Route path="create-post" element={<CreatePost />} />
-          <Route path="profile" element={<Root />}>
-            <Route index element={<CurrentUser />} />
-            <Route path=":id" element={<EditProfile />} />
+          <Route
+            index
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <Feed />
+              </Suspense>
+            }
+          />
+          <Route
+            path="explore"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <Search />
+              </Suspense>
+            }
+          />
+          <Route
+            path="comments/:id"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <Comments />
+              </Suspense>
+            }
+          />
+          <Route
+            path="create-post"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <CreatePost />
+              </Suspense>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <Root />
+              </Suspense>
+            }
+          >
+            <Route
+              index
+              element={
+                <Suspense fallback={<p>Loading...</p>}>
+                  <CurrentUser />
+                </Suspense>
+              }
+            />
+            <Route
+              path=":id"
+              element={
+                <Suspense fallback={<p>Loading...</p>}>
+                  <EditProfile />
+                </Suspense>
+              }
+            />
           </Route>
-          <Route path="/user/:id" element={<UserProfile />} />
-          <Route path="/:id/followers" element={<FollowersFollowings />} />
-          <Route path="/:id/followings" element={<FollowersFollowings />} />
+          <Route
+            path="/user/:id"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <UserProfile />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/:id/followers"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <FollowersFollowings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/:id/followings"
+            element={
+              <Suspense fallback={<p>Loading...</p>}>
+                <FollowersFollowings />
+              </Suspense>
+            }
+          />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
